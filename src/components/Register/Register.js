@@ -10,6 +10,10 @@ class Register extends React.Component {
     }
   }
 
+  componentDidMount () {
+    document.getElementById('name').focus();
+  }
+
   onNameChange = (event) => {
     this.setState({name: event.target.value})
   }
@@ -23,22 +27,26 @@ class Register extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/register', {
+    this.props.fetchData({ 
+      route: 'register',
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
         name: this.state.name
       })
     })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.loadUser(user)
-          this.props.onRouteChange('home');
+      .then((userAndToken) => {
+        if (userAndToken) {
+          const { userData, success, token} = userAndToken;
+          if (success === 'true') {
+            this.props.saveToken(token);
+            this.props.loadUser(userData)
+            this.props.onRouteChange('home');
+          }
         }
       })
+      .catch(() => (console.log('Unable to get user info')));
   }
 
   render() {

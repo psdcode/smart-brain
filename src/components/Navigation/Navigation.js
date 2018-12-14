@@ -1,21 +1,21 @@
 import React from 'react';
+import Profileicon from '../Profileicon/Profileicon';
 
-const Navigation = ({ onRouteChange, isSignedIn }) => {
-  const navStyle = {display: 'flex', justifyContent: 'flex-end'};
-  if (isSignedIn) {
-    return (
+const navStyle = {display: 'flex', justifyContent: 'flex-end'};
+
+const Navigation = ({ onRouteChange, isSignedIn, toggleModal }) => {
+  return isSignedIn
+    ? (
       <nav style={navStyle}>
-        <p onClick={() => onRouteChange('signout')} className='f3 link dim black underline pa3 pointer'>Sign Out</p>
+        <Profileicon toggleModal={toggleModal} onRouteChange={onRouteChange} />
       </nav>
-    );
-  } else {
-    return (
+    )
+    : (
       <nav style={navStyle}>
         <p onClick={() => onRouteChange('signin')} className='f3 link dim black underline pa3 pointer'>Sign In</p>
         <p onClick={() => onRouteChange('register')} className='f3 link dim black underline pa3 pointer'>Register</p>
       </nav>
     );
-  }
 };
 
 export default Navigation;
